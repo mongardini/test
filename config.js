@@ -1,6 +1,14 @@
 // # Ghost Configuration
 // Setup your Ghost install for various environments
 // Documentation can be found at http://support.ghost.org/config/
+app.use(function forceLiveDomain(req, res, next) {
+  // Don't allow user to hit Heroku now that we have a domain
+  var host = req.get('Host');
+  if (host === 'blog-josholot.herokuapp.com') {
+    return res.redirect(301, 'http://blog.josholot.org/' + req.originalUrl);
+  }
+  return next();
+});
 
 var path = require('path'),
     config;
